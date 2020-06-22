@@ -11,8 +11,10 @@ if [ -n "$GITHUB_REPO" ]; then
         git clone https://$GITHUB_REPO .; git pull
     fi
 
-    sh /generate.sh
-    
+    yarn build || (echo "Build failed. Aborting!"; exit 1)
+    echo "Copying files..."
+    rsync -q -r --delete docs/.vuepress/dist/ /root/html/
+    echo "Done!"
     if [ -n "$GITHUB_PUSH_REPO" ]; then
         if [ -n "$GITHUB_PUSH_TOKEN" ]; then
             PUSH_TOKEN=$GITHUB_PUSH_TOKEN
