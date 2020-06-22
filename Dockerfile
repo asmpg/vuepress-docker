@@ -1,4 +1,4 @@
-FROM node:alpine as build
+FROM alpine:edge as build
 
 RUN apk add curl tar gzip go libc-dev git
 COPY build.sh build.sh
