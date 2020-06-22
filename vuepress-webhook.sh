@@ -11,10 +11,8 @@ if [ -n "$GITHUB_REPO" ]; then
         git clone https://$GITHUB_REPO .; git pull
     fi
 
-    vuepress build || (echo "Build failed. Aborting!"; exit 1)
-    echo "Copying files..."
-    rsync -q -r --delete .vuepress/dist/ /root/html/
-    echo "Done!"
+    sh /generate.sh
+    
     if [ -n "$GITHUB_PUSH_REPO" ]; then
         if [ -n "$GITHUB_PUSH_TOKEN" ]; then
             PUSH_TOKEN=$GITHUB_PUSH_TOKEN
@@ -26,7 +24,7 @@ if [ -n "$GITHUB_REPO" ]; then
             PUSH_TOKEN=$GITHUB_TOKEN
         fi
         echo "Pushing to Github..."
-        cd .vuepress/dist
+        cd docs/.vuepress/dist
         git init
         git add -A
         git config --global user.email "vuepress@autobuild.local"
